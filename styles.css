@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow&display=swap');
+
+
+body {
+    color: #E1E1E1;
+    min-height: 100vh;
+    font-family: 'Barlow', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rounded {
+    border-radius: 20px;
+}
+
+.pad {
+    background-color: #42506B;
+    height: 40rem;
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 1.5rem;
+    gap: 0.3rem;
+}
+
+.key {
+    height: 4rem;
+    width: 4rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.display {
+    background-color: #243B67;
+    text-align: right;
+    height: 40%;
+    padding: 1.5rem;
+}
+
+.operator {
+    color:  rgb(250, 128, 47);
+}
+
+.config {
+    color: rgb(173, 255, 47);
+}
