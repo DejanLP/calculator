@@ -46,6 +46,10 @@ body {
     text-align: right;
     height: 40%;
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
 }
 
 .operator {
@@ -54,4 +58,14 @@ body {
 
 .config {
     color: rgb(173, 255, 47);
+}
+
+#result {
+    font-size: 40px;
+    font-weight: 900;
+}
+
+#calculation {
+    font-size: 12px;
+    font-weight: 100px;
 }
