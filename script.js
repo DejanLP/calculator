@@ -23,13 +23,11 @@ function multiply(array) {
 }
 
 function divide(array) {
-    if (array.every((el)=> {el === 0})) {
-        return 'error';
-    }
     let div = parseInt(array[0]) / parseInt(array[1]);
     for(let i = 2; i < array.length; i++) {
         div /= parseInt(array[i]);
     }
+    if (div === Infinity) return 'Division by 0 :c';
     return div;
 }
 
@@ -43,9 +41,81 @@ function operator(operator, array) {
 
 let result = document.querySelector('#result');
 let calculation = document.querySelector('#calculation');
+let tempCalc = document.querySelector('#tempCalc');
 let numbers = [];
 let operators = [];
 let tempResult = 0;
+let chain = false;
+
+let tempFirstEntry;
+let tempFirstOp = '';
+
+/**
+ * Depending on key pressed, puts corresponding result to the display
+ * 
+ * @param {*} value of a key
+ * @returns 
+ */
+function putOnDisplay(value) {
+    calculation.innerText = calculation.innerText + "" + value;
+
+    if (value === '+' || value === '-' || value === '/' || value === 'x') {
+        numbers.push(parseInt(number));
+        console.log(numbers);
+        number = '';
+        if(chain) {
+            calculate();
+            //calculation.innerText = value;
+        }
+        chain = true;
+        tempFirstEntry = numbers[0];
+        console.log(tempFirstOp);
+        clearArrays();
+    }
+    if (value === '=') {
+        numbers.push(parseInt(number));
+        calculate();
+        chain = false;
+    }
+
+    //resets the current data saved in variables
+    if (value ===  'reset') return reset();
+}
+
+/**
+ * Conducts the calculation and displays it
+ */
+function calculate() {
+    // unshift pushes element to first index of array
+    numbers.unshift(tempFirstEntry);
+    console.log(numbers);
+    tempCalc.innerText = tempResult;
+    tempResult = operator(tempFirstOp, numbers);
+    result.innerText = tempResult;
+    clearArrays();
+    numbers.push(tempResult);
+}
+
+/**
+ * Resets application to inital state
+ */
+function reset(){
+    calculation.innerText = '';
+    result.innerText = '0';
+    clearArrays();
+    chain = false;
+    tempCalc.innerText = '';
+    number = '';
+}
+
+/**
+ * Clears storage of numbers and operators to reset them
+ */
+function clearArrays() {
+    numbers = [];
+    operators = [];
+}
+
 
 const keys = document.querySelectorAll('.key');
 keys.forEach((key) => {
@@ -53,48 +123,12 @@ keys.forEach((key) => {
         putOnDisplay(key.getAttribute('value'))});
 });
 
-let tempFirstEntry;
-let tempFirstOp = '';
-function putOnDisplay(value) {
-    calculation.innerText = calculation.innerText + "" + value;
-    if (value === '+' || value === '-' || value === '/' || value === 'x') {
-        tempFirstEntry = numbers[0];
-        console.log(tempFirstOp);
-        numbers = [];
-        operators = [];
-        // if(tempResult === 0){
-        //     result.innerText = operator(value, numbers);
-        //     operators.push(value);
-        //     console.log(operators);
-        // }
-        // else {
-        //     numbers.push(tempResult);
-        //     numbers.slice(0, numbers.length - 2);
-        //     result.innerText = operator(value, numbers);
-        // }
-    }
-    if (value === '=') {
-        numbers.unshift(tempFirstEntry);
-        console.log(numbers);
-        tempResult = operator(tempFirstOp, numbers);
-        result.innerText = tempResult;
-        numbers = [];
-        operators = [];
-    } 
-    //resets the current data saved in variables
-    if (value ===  'reset') {
-        calculation.innerText = '';
-        result.innerText = '';
-        numbers = [];
-        operators = [];
-    }
-}
-
+let number = "";
 const numbs = document.querySelectorAll('.number');
 numbs.forEach(num => {
     num.addEventListener('click', () => {
-        numbers.push(parseInt(num.getAttribute('value')));
-        console.log(numbers);
+        number += num.getAttribute('value')
+        console.log(number);
     })
 });
 

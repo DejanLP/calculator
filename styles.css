@@ -2,6 +2,7 @@
 
 
 body {
+    background-color: #E1E1E1;
     color: #E1E1E1;
     min-height: 100vh;
     font-family: 'Barlow', sans-serif;
@@ -68,4 +69,14 @@ body {
 #calculation {
     font-size: 12px;
     font-weight: 100px;
+}
+
+.shadow {
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+}
+
+.divider {
+    height: 1px;
+    width: 60%;
+    background-color: #E1E1E1;
 }
