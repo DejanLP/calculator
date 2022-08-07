@@ -80,3 +80,15 @@ body {
     width: 60%;
     background-color: #E1E1E1;
 }
+
+img {
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

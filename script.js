@@ -3,7 +3,7 @@ function add(array) {
     for(let i = 0; i < array.length; i++) {
         sum += parseInt(array[i]);
     }
-    return sum;
+    return roundResult(sum);
 }
 
 function subtract(array) {
@@ -11,7 +11,7 @@ function subtract(array) {
     for(let i = 2; i < array.length; i++) {
         diff -= parseInt(array[i]);
     }
-    return diff;
+    return roundResult(diff);
 }
 
 function multiply(array) {
@@ -19,7 +19,7 @@ function multiply(array) {
 	for(let i = 0; i < array.length; i++) {
         prod *= parseInt(array[i]);
   }
-  return prod;
+  return roundResult(prod);
 }
 
 function divide(array) {
@@ -28,14 +28,20 @@ function divide(array) {
         div /= parseInt(array[i]);
     }
     if (div === Infinity) return 'Division by 0 :c';
-    return div;
+    return roundResult(div);
+}
+
+function modulo(array){
+    let mod = array[0] % array[1];
+    return roundResult(mod);
 }
 
 function operator(operator, array) {
     if (operator === 'x') return multiply(array);
-    if (operator === '/') return divide(array);
+    if (operator === '÷') return divide(array);
     if (operator === '+') return add(array);
     if (operator === '-') return subtract(array);
+    if (operator === '%') return modulo(array);
     return 'Please enter a valid operator.';
 }
 
@@ -72,7 +78,7 @@ function putOnDisplay(key) {
         console.log(tempFirstOp);
         clearArrays();
     }
-    if (value === '=') {
+    if (value === '=' && canUseOperator) {
         numbers.push(parseInt(number));
         calculate();
         chain = false;
@@ -118,12 +124,23 @@ function clearArrays() {
     operators = [];
 }
 
+/**
+ * Uses Number.EPSILON to make a more accurate rounding
+ */
+function roundResult(res) {
+    if(res % 1 === 0) {
+        return res;
+    }
+    return Math.round((res + Number.EPSILON) * 100) / 100;
+}
+
 
 const keys = document.querySelectorAll('.key');
 keys.forEach((key) => {
     key.addEventListener('click', () => {
-        if(key.classList.contains('operator') && canUseOperator === false) return;
-        putOnDisplay(key)});
+        if((key.classList.contains('operator') || key.getAttribute('value') === '=') && canUseOperator === false) return;
+        putOnDisplay(key)
+    });
 });
 
 let number = "";
