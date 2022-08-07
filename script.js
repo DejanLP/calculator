@@ -46,6 +46,7 @@ let numbers = [];
 let operators = [];
 let tempResult = 0;
 let chain = false;
+let canUseOperator = false;
 
 let tempFirstEntry;
 let tempFirstOp = '';
@@ -56,10 +57,9 @@ let tempFirstOp = '';
  * @param {*} value of a key
  * @returns 
  */
-function putOnDisplay(value) {
-    calculation.innerText = calculation.innerText + "" + value;
-
-    if (value === '+' || value === '-' || value === '/' || value === 'x') {
+function putOnDisplay(key) {
+    let value = key.getAttribute('value');
+    if (key.classList.contains('operator')) {
         numbers.push(parseInt(number));
         console.log(numbers);
         number = '';
@@ -77,9 +77,10 @@ function putOnDisplay(value) {
         calculate();
         chain = false;
     }
-
+    
     //resets the current data saved in variables
     if (value ===  'reset') return reset();
+    calculation.innerText = calculation.innerText + "" + value;
 }
 
 /**
@@ -105,6 +106,7 @@ function reset(){
     clearArrays();
     chain = false;
     tempCalc.innerText = '';
+    tempResult = '';
     number = '';
 }
 
@@ -120,13 +122,15 @@ function clearArrays() {
 const keys = document.querySelectorAll('.key');
 keys.forEach((key) => {
     key.addEventListener('click', () => {
-        putOnDisplay(key.getAttribute('value'))});
+        if(key.classList.contains('operator') && canUseOperator === false) return;
+        putOnDisplay(key)});
 });
 
 let number = "";
 const numbs = document.querySelectorAll('.number');
 numbs.forEach(num => {
     num.addEventListener('click', () => {
+        canUseOperator = true;
         number += num.getAttribute('value')
         console.log(number);
     })
@@ -135,9 +139,11 @@ numbs.forEach(num => {
 const ops = document.querySelectorAll('.operator');
 ops.forEach((op) => {
     op.addEventListener('click', () => {
+        if (canUseOperator === false) return;
         let opr = op.getAttribute('value');
         operators.push(opr);
         tempFirstOp = operators[0];
         console.log(operators);
+        canUseOperator = false;
     })
 });
