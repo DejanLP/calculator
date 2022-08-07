@@ -81,7 +81,7 @@ body {
     background-color: #E1E1E1;
 }
 
-img {
+#git-logo {
     width: 24px;
     height: 24px;
     margin-left: 5px;
@@ -91,4 +91,20 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#line {
+    position: absolute;
+    margin-left: -2%;
+    margin-top: -1%;
+}
+
+#calculator {
+    position: relative;
+}
+
+#sticker {
+    position: absolute;
+    margin-left: -16%;
+    margin-top: -16%;
 }
