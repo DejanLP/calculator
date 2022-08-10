@@ -88,7 +88,7 @@ function putOnDisplay(key) {
         tempFirstEntry = numbers[0];
         console.log(tempFirstOp);
         clearArrays();
-        canUseOperator = false;
+        //canUseOperator = false;
     }
     if (value === '=' && canUseOperator) {
         numbers.push(parseInt(number));
