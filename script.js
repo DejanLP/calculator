@@ -48,15 +48,24 @@ function operator(operator, array) {
 let result = document.querySelector('#result');
 let calculation = document.querySelector('#calculation');
 let tempCalc = document.querySelector('#tempCalc');
+
 let numbers = [];
 let operators = [];
-let tempResult = 0;
+let tempResult = '';
+
 let chain = false;
 let canUseOperator = false;
 
 let tempFirstEntry;
 let tempFirstOp = '';
-
+/**
+ * ========
+ * TODO: 
+ * - hotkey support
+ * - what does AC do
+ * - decimal input support
+ * =======
+ */
 /**
  * Depending on key pressed, puts corresponding result to the display
  * 
@@ -64,6 +73,9 @@ let tempFirstOp = '';
  * @returns 
  */
 function putOnDisplay(key) {
+    if (key.getAttribute('value') === '+/-' || key.getAttribute('value') === 'AC') return;
+    if ((key.classList.contains('operator') || key.getAttribute('value') === '=') && canUseOperator === false) return;
+    key.classList.toggle('pressed');
     let value = key.getAttribute('value');
     if (key.classList.contains('operator')) {
         numbers.push(parseInt(number));
@@ -71,12 +83,12 @@ function putOnDisplay(key) {
         number = '';
         if(chain) {
             calculate();
-            //calculation.innerText = value;
         }
         chain = true;
         tempFirstEntry = numbers[0];
         console.log(tempFirstOp);
         clearArrays();
+        canUseOperator = false;
     }
     if (value === '=' && canUseOperator) {
         numbers.push(parseInt(number));
@@ -102,6 +114,24 @@ function calculate() {
     clearArrays();
     numbers.push(tempResult);
 }
+
+const keyCodes = [48,49,50,51,52,53,54,55,56,57,171,173,68,88,190,13,77,20,27]
+function docKeyDown (e) {
+    if(keyCodes.includes(e.keyCode)) {
+        console.log(e.keyCode);
+        let domElement = document.querySelector(`.key[data="${e.keyCode}"]`);
+        console.log(domElement);
+        if (e.keyCode >= 48 && e.keyCode <= 57)  {
+            handleNumbers(domElement);
+        }
+        else if (e.keyCode > 57) {
+            handleOperators(domElement);
+        }
+        putOnDisplay(domElement);
+ }
+}
+
+document.addEventListener('keydown', docKeyDown);
 
 /**
  * Resets application to inital state
@@ -134,33 +164,60 @@ function roundResult(res) {
     return Math.round((res + Number.EPSILON) * 100) / 100;
 }
 
+const config = document.querySelectorAll('.config');
+config.forEach((conf) => {
+    conf.addEventListener('click', () => {
+        if (conf.getAttribute('value') === '+/-') {
+
+            if (number.charAt(0) === '-'){
+                number = number.slice(1, number.length);
+            }
+            else {
+                number = '-' + number;
+            }
+            calculation.innerText = number;
+        }
+    })
+});
 
 const keys = document.querySelectorAll('.key');
 keys.forEach((key) => {
-    key.addEventListener('click', () => {
-        if((key.classList.contains('operator') || key.getAttribute('value') === '=') && canUseOperator === false) return;
-        putOnDisplay(key)
-    });
+    key.addEventListener('transitionend', () => {key.classList.remove('pressed')});
+    key.addEventListener('click', () => {putOnDisplay(key);});
 });
 
-let number = "";
+let number = ''
 const numbs = document.querySelectorAll('.number');
 numbs.forEach(num => {
     num.addEventListener('click', () => {
-        canUseOperator = true;
-        number += num.getAttribute('value')
-        console.log(number);
-    })
+        handleNumbers(num);
+    });
 });
 
+function handleNumbers(num) {
+    canUseOperator = true;
+    number += num.getAttribute('value')
+    console.log(number);
+}
+
+let cut = false;
 const ops = document.querySelectorAll('.operator');
 ops.forEach((op) => {
     op.addEventListener('click', () => {
-        if (canUseOperator === false) return;
-        let opr = op.getAttribute('value');
-        operators.push(opr);
-        tempFirstOp = operators[0];
-        console.log(operators);
+        handleOperators(op);
         canUseOperator = false;
     })
 });
+
+function handleOperators(op) {
+    if (canUseOperator === false) return;
+    if (cut) {
+        calculation.innerText = '';
+        calculation.innerText = op.getAttribute('value');
+    }
+    cut = true;
+    let opr = op.getAttribute('value');
+    operators.push(opr);
+    tempFirstOp = operators[0];
+    console.log(operators);
+}
