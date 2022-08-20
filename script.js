@@ -1,15 +1,15 @@
 function add(array) {
     let sum = 0;
     for(let i = 0; i < array.length; i++) {
-        sum += parseInt(array[i]);
+        sum += parseFloat(array[i]);
     }
     return roundResult(sum);
 }
 
 function subtract(array) {
-    let diff = parseInt(array[0]) - parseInt(array[1]);
+    let diff = parseFloat(array[0]) - parseFloat(array[1]);
     for(let i = 2; i < array.length; i++) {
-        diff -= parseInt(array[i]);
+        diff -= parseFloat(array[i]);
     }
     return roundResult(diff);
 }
@@ -17,15 +17,15 @@ function subtract(array) {
 function multiply(array) {
     let prod = 1;
 	for(let i = 0; i < array.length; i++) {
-        prod *= parseInt(array[i]);
+        prod *= parseFloat(array[i]);
   }
   return roundResult(prod);
 }
 
 function divide(array) {
-    let div = parseInt(array[0]) / parseInt(array[1]);
+    let div = parseFloat(array[0]) / parseFloat(array[1]);
     for(let i = 2; i < array.length; i++) {
-        div /= parseInt(array[i]);
+        div /= parseFloat(array[i]);
     }
     if (div === Infinity) return 'Division by 0 :c';
     return roundResult(div);
@@ -61,9 +61,8 @@ let tempFirstOp = '';
 /**
  * ========
  * TODO: 
- * - hotkey support
- * - what does AC do
- * - decimal input support
+ * - del support + hotkey
+ * - decimal input support + hotkey
  * =======
  */
 /**
@@ -78,7 +77,7 @@ function putOnDisplay(key) {
     key.classList.toggle('pressed');
     let value = key.getAttribute('value');
     if (key.classList.contains('operator')) {
-        numbers.push(parseInt(number));
+        numbers.push(parseFloat(number));
         console.log(numbers);
         number = '';
         if(chain) {
@@ -91,7 +90,7 @@ function putOnDisplay(key) {
         //canUseOperator = false;
     }
     if (value === '=' && canUseOperator) {
-        numbers.push(parseInt(number));
+        numbers.push(parseFloat(number));
         calculate();
         chain = false;
     }
