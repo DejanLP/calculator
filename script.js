@@ -58,13 +58,7 @@ let canUseOperator = false;
 
 let tempFirstEntry;
 let tempFirstOp = '';
-/**
- * ========
- * TODO: 
- * - del support + hotkey
- * - decimal input support + hotkey
- * =======
- */
+
 /**
  * Depending on key pressed, puts corresponding result to the display
  * 
@@ -78,14 +72,12 @@ function putOnDisplay(key) {
     let value = key.getAttribute('value');
     if (key.classList.contains('operator')) {
         numbers.push(parseFloat(number));
-        console.log(numbers);
         number = '';
         if(chain) {
             calculate();
         }
         chain = true;
         tempFirstEntry = numbers[0];
-        console.log(tempFirstOp);
         clearArrays();
         //canUseOperator = false;
     }
@@ -106,7 +98,6 @@ function putOnDisplay(key) {
 function calculate() {
     // unshift pushes element to first index of array
     numbers.unshift(tempFirstEntry);
-    console.log(numbers);
     tempCalc.innerText = tempResult;
     tempResult = operator(tempFirstOp, numbers);
     result.innerText = tempResult;
@@ -116,10 +107,8 @@ function calculate() {
 
 const keyCodes = [48,49,50,51,52,53,54,55,56,57,171,173,68,88,190,13,77,20,27]
 function docKeyDown (e) {
-    if(keyCodes.includes(e.keyCode)) {
-        console.log(e.keyCode);
+        if(keyCodes.includes(e.keyCode)) {
         let domElement = document.querySelector(`.key[data="${e.keyCode}"]`);
-        console.log(domElement);
         if (e.keyCode >= 48 && e.keyCode <= 57)  {
             handleNumbers(domElement);
         }
@@ -193,10 +182,13 @@ numbs.forEach(num => {
     });
 });
 
+/**
+ * Conducts what needs to be done when number is pressed
+ * @param {*} num 
+ */
 function handleNumbers(num) {
     canUseOperator = true;
     number += num.getAttribute('value')
-    console.log(number);
 }
 
 let cut = false;
@@ -207,7 +199,11 @@ ops.forEach((op) => {
         canUseOperator = false;
     })
 });
-
+/**
+ * Conducts what needs to be done when operator is pressed
+ * @param {*} op 
+ * @returns 
+ */
 function handleOperators(op) {
     if (canUseOperator === false) return;
     if (cut) {
@@ -218,5 +214,4 @@ function handleOperators(op) {
     let opr = op.getAttribute('value');
     operators.push(opr);
     tempFirstOp = operators[0];
-    console.log(operators);
 }
